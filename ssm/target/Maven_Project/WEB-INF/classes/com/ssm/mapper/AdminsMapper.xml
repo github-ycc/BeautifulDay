@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >    
+<mapper namespace="com.ssm.dao.AdminsDao" >      
+    <resultMap id="BaseResultMap" type="com.ssm.dto.Admins">    
+        <result column="admin_name" property="admin_name" jdbcType="VARCHAR" />    
+        <result column="admin_pwd" property="admin_pwd" jdbcType="VARCHAR" />   
+        <result column="admin_grade" property="admin_grade" jdbcType="VARCHAR" /> 
+    </resultMap>
+    <resultMap id="BaseResultMap1" type="com.ssm.dto.News">    
+        <result column="new_id" property="new_id" jdbcType="VARCHAR" />    
+        <result column="admin_id" property="admin_id" jdbcType="VARCHAR" />
+		<result column="new_title" property="new_title" jdbcType="VARCHAR" />
+		<result column="new_information" property="new_information" jdbcType="VARCHAR" />
+		<result column="new_photo" property="new_photo" jdbcType="VARCHAR" />
+		<result column="new_date" property="new_date" jdbcType="VARCHAR" />   
+		<result column="notice_title" property="notice_title" jdbcType="VARCHAR" />
+		<result column="notice_information" property="notice_information" jdbcType="VARCHAR" />
+		<result column="notice_photo" property="notice_photo" jdbcType="VARCHAR" />
+		<result column="notice_date" property="notice_date" jdbcType="VARCHAR" />
+		<result column="question_title" property="question_title" jdbcType="VARCHAR" />
+		<result column="question_information" property="question_information" jdbcType="VARCHAR" />
+		<result column="question_grade" property="question_grade" jdbcType="VARCHAR" />
+    </resultMap>  
+    <resultMap id="BaseResultMap2" type="com.ssm.dto.Students">    
+        <result column="stu_id" property="stu_id" jdbcType="VARCHAR" />    
+        <result column="stu_name" property="stu_name" jdbcType="VARCHAR" />   
+        <result column="stu_pwd" property="stu_pwd" jdbcType="VARCHAR" /> 
+        <result column="stu_sex" property="stu_sex" jdbcType="VARCHAR" /> 
+        <result column="stu_date" property="stu_date" jdbcType="VARCHAR" /> 
+    </resultMap>     
+    <resultMap id="BaseResultMap3" type="com.ssm.dto.Users">    
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />    
+        <result column="user_name" property="user_name" jdbcType="VARCHAR" />   
+        <result column="user_pwd" property="user_pwd" jdbcType="VARCHAR" /> 
+    </resultMap> 
+    <resultMap id="BaseResultMap4" type="com.ssm.dto.Scores">    
+        <result column="score_id" property="score_id" jdbcType="VARCHAR" />    
+        <result column="stu_id" property="stu_id" jdbcType="VARCHAR" />   
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" /> 
+        <result column="score" property="score" jdbcType="VARCHAR" /> 
+    </resultMap>         
+    <resultMap id="BaseResultMap5" type="com.ssm.dto.Students">    
+        <result column="stu_id" property="stu_id" jdbcType="VARCHAR" />    
+        <result column="stu_name" property="stu_name" jdbcType="VARCHAR" />   
+        <result column="stu_pwd" property="stu_pwd" jdbcType="VARCHAR" /> 
+        <result column="stu_sex" property="stu_sex" jdbcType="VARCHAR" /> 
+        <result column="stu_date" property="stu_date" jdbcType="VARCHAR" /> 
+    </resultMap>         
+    <!-- 管理员登录查询-->    
+    <select id="adminLogin"  resultMap="BaseResultMap" >    
+        select * from admins where admin_name =#{admin_name};
+    </select>
+	<!-- 管理员展示-->    
+    <select id="admins_show"  resultMap="BaseResultMap" >    
+        select * from admins;
+    </select>
+        <!-- 用户    删除-->    
+    <delete id="admins_deleteuser" parameterType="com.ssm.dto.Users">
+      	delete from users where user_name = #{user_name};
+    </delete>
+<!--         用户    编辑    
+    <update id="admins_edituser" parameterType="com.ssm.dto.Users">
+      	update users set user_pwd=#{user_pwd} where user_name = #{user_name};
+    </update> -->
+        <!-- 管理员    添加-->    
+    <insert id="admins_add" parameterType="com.ssm.dto.Admins">
+      	INSERT INTO admins (admin_name,admin_pwd,admin_grade) VALUES (#{admin_name},#{admin_pwd},#{admin_grade}); 
+    </insert>  
+        <!-- 管理员    删除-->    
+    <delete id="delete_admins" parameterType="com.ssm.dto.Admins">
+      	delete from admins where admin_name = #{admins_name};
+    </delete>
+        <!-- 管理员    编辑-->    
+    <update id="edit_admins" parameterType="com.ssm.dto.Admins">
+      	update admins set admin_pwd = #{admins_pwd} where admin_name = #{admins_name};
+    </update>
+
+     
+      
+    <!-- 最新通知 添加-->    
+    <insert id="admins_notice" parameterType="com.ssm.dto.News">
+      	INSERT INTO news (admin_name,notice_title,notice_information,notice_date) VALUES (#{admin_name},#{notice_title},#{notice_information},#{notice_date}); 
+    </insert> 
+    <!-- 就业快讯 添加-->    
+    <insert id="admins_news" parameterType="com.ssm.dto.News">
+      	INSERT INTO news (admin_name,new_title,new_information,new_date,new_photo) VALUES (#{admin_name},#{new_title},#{new_information},#{new_date},#{fileName}); 
+    </insert> 
+    <!-- 最新通知/新闻  页面展示-->    
+    <select id="notice_show" resultMap="BaseResultMap1">    
+        select * FROM news GROUP BY news.new_id desc;
+       <!--   select * from news WHERE news.new_title IS NOT NULL GROUP BY news.new_date desc LIMIT 6;-->
+    </select>   
+    
+    <!-- 学生查询name-->    
+    <select id="studentIdQuery"  resultMap="BaseResultMap2" >    
+        select * from students where stu_id =#{stu_id};
+    </select> 
+    <!-- 用户name查询id-->    
+    <select id="userIdQuery"  resultMap="BaseResultMap3" >    
+        select * from users where user_name =#{user_name};
+    </select> 
+	<!-- 打分记录展示-->    
+    <select id="scores_show"  resultMap="BaseResultMap4" >    
+        select * from scores;
+    </select>
+     <!-- 新闻    删除-->    
+    <delete id="notice_delete" parameterType="com.ssm.dto.News">
+      	delete from news where new_id = #{new_id};
+    </delete>
+    
+    <!-- 学生展示-->    
+    <select id="students_show"  resultMap="BaseResultMap5" >    
+        select * from students;
+    </select>
+    <!-- 学生    添加-->    
+    <insert id="student_add" parameterType="com.ssm.dto.Students">
+      	INSERT INTO students (stu_name,stu_pwd,stu_sex,stu_date) VALUES (#{stu_name},#{stu_pwd},#{stu_sex},#{stu_date}); 
+    </insert>  
+     <!-- 学生    删除-->    
+    <delete id="student_delete" parameterType="com.ssm.dto.Students">
+      	delete from students where stu_id = #{stu_id};
+    </delete>
+    <!-- 新闻详情查询-->    
+    <select id="news_id_show"  resultMap="BaseResultMap1" >    
+        select * from news where new_id =#{new_id};
+    </select> 
+     <!-- 通知详情查询-->    
+    <select id="notice_id_show"  resultMap="BaseResultMap1" >    
+        select * from news where new_id =#{new_id};
+    </select> 
+    <!-- 数据分析查询学生姓名-->    
+    <select id="stu_name_array"  resultMap="BaseResultMap5" >    
+        select * from students;
+    </select> 
+    <!-- 数据分析查询学生姓名-->    
+    <select id="score_array"  resultMap="BaseResultMap4" >    
+        select * from scores;
+    </select> 
+
+</mapper>  

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >    
+<mapper namespace="com.ssm.dao.UsersDao" >      
+    <resultMap id="BaseResultMap" type="com.ssm.dto.Users">    
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />    
+        <result column="user_name" property="user_name" jdbcType="VARCHAR" />    
+        <result column="user_pwd" property="user_pwd" jdbcType="VARCHAR" />    
+    </resultMap>
+    <!-- 用户登录-->    
+    <select id="userLogin"  resultMap="BaseResultMap" >    
+        select * from users where user_name =#{user_name};
+    </select>
+    <!-- 最新通知  页面展示-->    
+    <select id="show_user" resultMap="BaseResultMap">    
+        select * from users;
+    </select>  
+    <!-- 用户    添加     -->
+    <insert id="admins_adduser" parameterType="com.ssm.dto.Users">
+      	INSERT INTO users (user_name,user_pwd) VALUES (#{user_name},#{user_pwd}); 
+    </insert>  
+     <!-- 用户    编辑 -->    
+    <update id="admins_edituser" parameterType="com.ssm.dto.Users">
+      	update users set user_pwd=#{user_pwd} where user_name = #{user_name};
+    </update> 
+    <!-- 评分     -->
+    <insert id="user_score" parameterType="com.ssm.dto.Scores">
+      	INSERT INTO scores (stu_id,user_id,score) VALUES (#{stu_id},#{user_id},#{score}); 
+    </insert>  
+</mapper>  
